@@ -1,5 +1,5 @@
 # pPSDR
-A repository for penalized Principal Sufficient Dimension Reduction (pPSDR)
+A repository for penalized Principal Sufficient Dimension Reduction with Group Coordinate Descent algorithm (pPSDR)
 
 Below functions are belong to folder 'R'
 fn_pplssvm.R: it includes the function 'pplssvm' for the penalized principal least squares SVM (PPLS-SVM)
