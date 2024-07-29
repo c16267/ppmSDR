@@ -9,13 +9,16 @@
 # penalty: type of penalty function: 'grSCAD', 'grLasso', 'grMCP'. 
 # max.iter: maximum number of iteration
 
+
+
 pplssvm <- function(x, y, H, C, lambda=NULL, gamma=NULL, penalty=NULL, max.iter=100){
   require(grpreg)
   require(Matrix)
   require(expm)
   require(blockmatrix)
   require(Rfast)
-  
+  require(fastmatrix)
+
   n <- nrow(x)
   p <- ncol(x)
   
@@ -36,22 +39,36 @@ pplssvm <- function(x, y, H, C, lambda=NULL, gamma=NULL, penalty=NULL, max.iter=
   #S : expanded covariance matrix # h(p+1) x h(p+1)
   Sigma.hat <- cov(x)
   Sigma.hat.star <- cbind(rep(0,p+1),rbind(rep(0,p), Sigma.hat))
-  temp <- as.list(1:h)
-  for (k in 1:h)  temp[[k]] <- Sigma.hat.star
-  S <- bdiag(temp)  # h(p+1) x h(p+1)
   
+  # temp <- as.list(1:h)
+  # for (k in 1:h)  temp[[k]] <- Sigma.hat.star
+  # S <- bdiag(temp)  # h(p+1) x h(p+1)
+  # 
+  # 
+  # #W : expanded data matrix 
+  # temp <- as.list(1:h)
+  # for (k in 1:h)  temp[[k]] <- x.tilde
+  # W <- bdiag(temp) # nh x h(p+1)
+  # 
+  # 
+  # a.eig <- eigen(0.5*S+t(W)%*%W) 
+  # G.tilde.big <- (C)*a.eig$vectors %*% diag(sqrt(a.eig$values)) %*% solve(a.eig$vectors) 
+  # 
+  # #cholesky decompositon
+  # xi <- (C)*(Matrix::chol2inv(G.tilde.big)%*%t(W))%*%y.tilde
+  # xi.tilde <- xi <- (as.vector(xi))
+  # 
   
-  #W : expanded data matrix 
-  temp <- as.list(1:h)
-  for (k in 1:h)  temp[[k]] <- x.tilde
-  W <- bdiag(temp) # nh x h(p+1)
-
-  
-  a.eig <- eigen(0.5*S+t(W)%*%W) 
+  #X
+  diag_mat <- diag(1, h)
+  A <- (t(x.tilde)%*%x.tilde + 0.5*Sigma.hat.star)
+  X_half <- kronecker(diag_mat, A)
+  a.eig <- eigen(X_half) 
   G.tilde.big <- (C)*a.eig$vectors %*% diag(sqrt(a.eig$values)) %*% solve(a.eig$vectors) 
-
-  #cholesky decompositon
-  xi <- (C)*(Matrix::chol2inv(G.tilde.big)%*%t(W))%*%y.tilde
+  
+  #tilde Y
+  B <- kronecker(diag_mat, x.tilde)
+  xi <- C*Matrix::chol2inv(G.tilde.big)%*% t(B) %*%y.tilde
   xi.tilde <- xi <- (as.vector(xi))
   
   #restart the original process
