@@ -103,7 +103,7 @@ ppl2svm <- function(x, y, H, C, lambda, gamma, penalty, max.iter=100)
       }
       new.theta <- init.theta
       delta <- max(na.omit(abs(new.theta - old.theta)/abs(old.theta)))
-      print(paste("iter:", iter, "delta=",delta))
+      #print(paste("iter:", iter, "delta=",delta))
       if (delta < 1.0e-5) break
       
     }
@@ -160,7 +160,7 @@ ppl2svm <- function(x, y, H, C, lambda, gamma, penalty, max.iter=100)
         }
         new.theta <- init.theta
         delta <- max(na.omit(abs(new.theta - old.theta)/abs(old.theta)))
-        print(paste("iter:", iter, "delta=",delta))
+        #print(paste("iter:", iter, "delta=",delta))
         if (delta < 1.0e-5) break
     }
   }else if(penalty == "grMCP"){
@@ -215,7 +215,7 @@ ppl2svm <- function(x, y, H, C, lambda, gamma, penalty, max.iter=100)
     }
     new.theta <- init.theta
     delta <- max(na.omit(abs(new.theta - old.theta)/abs(old.theta)))
-    print(paste("iter:", iter, "delta=",delta))
+    #print(paste("iter:", iter, "delta=",delta))
     if (delta < 1.0e-5) break
    }
   }

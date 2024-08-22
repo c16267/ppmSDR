@@ -8,33 +8,6 @@
 # penalty: type of penalty function: 'grSCAD', 'grLasso', 'grMCP'. 
 # max.iter: maximum number of iteration
 
-n <- 10 # sample size
-p   <- 5
-max.iter <- maxiter <- 30
-H <- 3
-h <- 1.0e-5; eps <- 1.0e-5
-C <- 1
-delta <- 0.1
-
-# true cs
-B <- matrix(0, p, 2)
-add_term <- rnorm(p*2, 0, 1)*10^-3
-if (case == 1) {B[,c(1:2)] <- (1/sqrt(p))+add_term; q = 2}
-if (case == 2) {B[1:(p/2),1] <- B[-(1:(p/2)),2] <- 1/sqrt(p/2); q = 2}
-if (case == 3) {B[1,1] <- B[2,2] <- 1; q = 2}
-Sigma <- diag(1,p)
-x <- mvrnorm(n, rep(0, p), Sigma)
-eps <- rnorm(n, 0, 1)
-x1 <- x %*% B[,1]
-x2 <- x %*% B[,2]
-model=1
-# responses
-{
-  y <- if (model == 1) (x1/(0.5 + (x2 + 1)^2))+0.2*eps
-  else if (model == 2) (x1+0.5)*(x2-0.5)^2+0.2*eps
-  else if (model == 3) 0.5*x1^3 + (2*x2+3)*eps #asymmetric Dong #3
-}   
-
 
 ppalssvm <- function(x, y, H, C, lambda, gamma, penalty, max.iter=100){
 
