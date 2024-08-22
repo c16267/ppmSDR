@@ -10,4 +10,5 @@ Below functions are belong to folder 'R'
 - fn_tune_pplssvm.R: it includes the function 'tune_pplssvm', which returns the optimal lambda for P2LSM via cross-validation
 - fn_tune_ppalssvm.R: it includes the function 'tune_ppalssvm', which returns the optimal lambda for P2AR via cross-validation
 - fn_tune_ppl2svm.R: it includes the function 'tune_ppl2svm', which returns the optimal lambda for P2L2M via cross-validation
+- fn_tune_pplr.R: it includes the functions 'tune_pplr' and 'tune_wpplr', which returns the optimal lambda for P2(W)LR via cross-validation
 - fn_minor_pPSDR.R: it includes the auxiliary functions for pPSDR (i.e., soft-thresholding, firm-thresholding operator, and etc.)
