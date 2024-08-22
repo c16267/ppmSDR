@@ -7,42 +7,7 @@
 # gamma: nonconvex shape parameter
 # penalty: type of penalty function: 'grSCAD', 'grLasso', 'grMCP'. 
 # max.iter: maximum number of iteration
-
-rm(list=ls())
-
-
-library(grpreg)
-library(Matrix)
-library(multcomp)
-library(expm)
-library(blockmatrix)
-library(ggplot2)
-library(Rfast)
-
-
-
-set.seed(1)
-n <- 300 # sample size
-p <- 10
-max.iter <- maxiter <- 100
-H <- 10
-h <- 1.0e-5; eps <- 1.0e-5
-C <- 1
-delta <- 0.05
-# true cs
-B <- matrix(0, p, 2)
-B[1,1] <- B[2,2] <- 1; q = 2
-Sigma <- diag(1,p)
-x <- mvrnorm(n, rep(0, p), Sigma)
-eps <- rnorm(n, 0, 1)
-x1 <- x %*% B[,1]
-x2 <- x %*% B[,2]
-y <- (x1/(0.5 + (x2 + 1)^2))+0.2*eps
   
-  
-
-
-
 ppl2svm <- function(x, y, H, C, lambda, gamma, penalty, max.iter=100)
 {
   
@@ -268,14 +233,3 @@ ppl2svm <- function(x, y, H, C, lambda, gamma, penalty, max.iter=100)
   return(rslt)
 }
 
-
-obj_scad <- ppl2svm(x, y, H=10, C=1, lambda=0.1, gamma=3.7, penalty='grSCAD', max.iter=100)
-round(obj_scad$vectors[, 1:2, drop=FALSE], 3)
-
-obj_mcp <- ppl2svm(x, y, H=10, C=1, lambda=0.1, gamma=4, penalty='grMCP', max.iter=100)
-round(obj_mcp$vectors[, 1:2, drop=FALSE], 3)
-
-obj_lasso <- ppl2svm(x, y, H=10, C=1, lambda=0.1, penalty='grLasso', max.iter=100)
-round(obj_lasso$vectors[, 1:2, drop=FALSE], 3)
-
-\]
