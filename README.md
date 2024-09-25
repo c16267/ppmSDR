@@ -1,5 +1,5 @@
 # Penalized Principal Machine (Penalized PM)
-A repository for penalized Principal Machine with Group Coordinate Descent algorithm (Penalized PM)
+A repository for penalized Principal Machine solved by the Group Coordinate Descent algorithm (Penalized PM)
 
 Below functions are belong to folder 'R'
 - fn_pplssvm.R: it includes the function 'pplssvm' for the penalized principal least squares SVM (P2LSM)
