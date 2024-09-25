@@ -1,12 +1,14 @@
 # Penalized Principal Machine (Penalized PM)
 A repository for penalized Principal Machine solved by the Group Coordinate Descent algorithm (Penalized PM)
 
-Below functions are belong to folder 'R'
+Below functions belong to folder 'R'
 - fn_pplssvm.R: it includes the function 'pplssvm' for the penalized principal least squares SVM (P2LSM)
 - fn_ppals.R: it includes the function 'ppalssvm' for the penalized principal asymmetric least square regression (P2AR)
 - fn_ppl2svm.R: it includes the function 'ppl2svm' for the penalized principal L2-hinge least squares SVM (P2L2M)
 - fn_pplr.R: it includes the function 'pplr' for the penalized principal logistic regression with GCD optimizer (P2LR)
 - fn_wpplr.R: it includes the function 'wpplr' for the weighted penalized principal logistic regression (P2WLR)
+- fn_spsdr.R: it includes the function 'spsvmSDR', which is a unified function for the penalized PM methods. It enjoys the proposed methods by changing the method argument.
+- fn_test.R: it includes the example for testing function 'spsvmSDR'.
 - fn_tune_pplssvm.R: it includes the function 'tune_pplssvm', which returns the optimal lambda for P2LSM via cross-validation
 - fn_tune_ppalssvm.R: it includes the function 'tune_ppalssvm', which returns the optimal lambda for P2AR via cross-validation
 - fn_tune_ppl2svm.R: it includes the function 'tune_ppl2svm', which returns the optimal lambda for P2L2M via cross-validation
