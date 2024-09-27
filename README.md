@@ -1,7 +1,7 @@
 # Penalized Principal Machine (Penalized PM)
 A repository for penalized Principal Machine solved by the Group Coordinate Descent algorithm (Penalized PM)
 
-Below functions belong to folder 'R'
+1. Functions below belong to folder 'R'
 - fn_pplssvm.R: it includes the function 'pplssvm' for the penalized principal least squares SVM (P2LSM)
 - fn_ppals.R: it includes the function 'ppalssvm' for the penalized principal asymmetric least square regression (P2AR)
 - fn_ppl2svm.R: it includes the function 'ppl2svm' for the penalized principal L2-hinge least squares SVM (P2L2M)
@@ -14,3 +14,5 @@ Below functions belong to folder 'R'
 - fn_tune_ppl2svm.R: it includes the function 'tune_ppl2svm', which returns the optimal lambda for P2L2M via cross-validation
 - fn_tune_pplr.R: it includes the functions 'tune_pplr' and 'tune_wpplr', which returns the optimal lambda for P2(W)LR via cross-validation
 - fn_minor_pPSDR.R: it includes the auxiliary functions for pPSDR (i.e., soft-thresholding, firm-thresholding operator, and etc.)
+2. The 'data' folder contains the Boston housing and Diagnostic Wisconsin Breast Cancer datasets.
+3. The 'simulation' folder contains the replication R codes for the simulations and real data analysis.
