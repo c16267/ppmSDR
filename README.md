@@ -13,7 +13,8 @@ A repository for penalized Principal Machine solved by the Group Coordinate Desc
 - fn_tune_ppalssvm.R: it includes the function 'tune_ppalssvm', which returns the optimal lambda for P2AR via cross-validation
 - fn_tune_ppl2svm.R: it includes the function 'tune_ppl2svm', which returns the optimal lambda for P2L2M via cross-validation
 - fn_tune_pplr.R: it includes the functions 'tune_pplr' and 'tune_wpplr', which returns the optimal lambda for P2(W)LR via cross-validation
-- fn_minor_pPSDR.R: it includes the auxiliary functions for pPSDR (i.e., soft-thresholding, firm-thresholding operator, and etc.)
+- fn_minor_pPSDR.R: it includes the auxiliary functions for pPSDR (i.e., soft-thresholding, firm-thresholding operator, etc.).
+- fn_penalized_logit_dc.R, fn_sparse_SIR.R, fn_tune_sparse_SIR.R: PPLR solved by DC algorithm, sparse SIR, and its tuning code, respectively.
 2. The 'data' folder contains the Boston housing and Diagnostic Wisconsin Breast Cancer datasets.
 3. The 'simulation' folder contains the replication R codes for the simulations and real data analysis.
   - fn_simulation_continuous.R: it includes the simulation code for Table 1.
