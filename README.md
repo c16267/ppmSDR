@@ -30,3 +30,87 @@ Efficient computation is achieved via the Group Coordinate Descent (GCD) and MM-
 # Install from GitHub (requires devtools)
 devtools::install_github("c16267/ppmSDR")
 ```
+
+
+\section*{Repository Structure}
+
+\begin{itemize}
+    \item \textbf{R/} : Core functions for penalized PM estimation and tuning
+    \begin{itemize}
+        \item \texttt{fn\_pplssvm.R} : Penalized principal least squares SVM (\texttt{pplssvm})
+        \item \texttt{fn\_ppals.R} : Penalized principal asymmetric least squares (\texttt{ppalssvm})
+        \item \texttt{fn\_ppl2svm.R} : Penalized principal L2-hinge SVM (\texttt{ppl2svm})
+        \item \texttt{fn\_pplr.R} : Penalized principal logistic regression (\texttt{pplr})
+        \item \texttt{fn\_wpplr.R} : Weighted penalized principal logistic regression (\texttt{wpplr})
+        \item \texttt{fn\_spsdr.R} : Unified wrapper for penalized PMs (\texttt{spsvmSDR})
+        \item \texttt{fn\_test.R} : Example usage of \texttt{spsvmSDR}
+        \item \texttt{fn\_tune\_*.R} : Cross-validation for optimal lambda selection
+        \item \texttt{fn\_minor\_pPSDR.R} : Auxiliary functions (thresholding, etc.)
+        \item \texttt{fn\_penalized\_logit\_dc.R}, \texttt{fn\_sparse\_SIR.R}, \texttt{fn\_tune\_sparse\_SIR.R} : Other SDR competitors
+    \end{itemize}
+    \item \textbf{data/} : Example datasets (Boston Housing, Breast Cancer)
+    \item \textbf{simulation/} : Scripts to reproduce simulation studies
+    \begin{itemize}
+        \item \texttt{fn\_simulation\_continuous.R}
+        \item \texttt{fn\_simulation\_binary.R}
+        \item \texttt{fn\_simulation\_time\_n.R}
+    \end{itemize}
+\end{itemize}
+
+\section*{Main Functions}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{lll}
+        \textbf{Function} & \textbf{Description} & \textbf{Penalty Options} \\
+        \hline
+        \texttt{pplssvm} & Penalized principal least squares SVM (P$^2$LSM) & SCAD, Lasso, MCP \\
+        \texttt{ppalssvm} & Penalized principal asymmetric least squares (P$^2$AR) & SCAD, Lasso, MCP \\
+        \texttt{ppl2svm} & Penalized principal L2-hinge SVM (P$^2$L2M) & SCAD, Lasso, MCP \\
+        \texttt{pplr} & Penalized principal logistic regression (P$^2$LR) & SCAD, Lasso, MCP \\
+        \texttt{wpplr} & Weighted penalized principal logistic regression (P$^2$WLR) & SCAD, Lasso, MCP \\
+        \texttt{ppsvm} & Penalized principal SVM (P$^2$SVM, MM-GCD) & SCAD, Lasso, MCP \\
+        \texttt{ppqr} & Penalized principal quantile regression (P$^2$QR) & SCAD, Lasso, MCP \\
+        \texttt{ppwlssvm} & Penalized principal weighted least squares SVM (P$^2$WLSM) & SCAD, Lasso, MCP \\
+        \texttt{ppwlr} & Penalized principal weighted logistic regression (P$^2$WLR) & SCAD, Lasso, MCP \\
+        \texttt{ppwl2svm} & Penalized principal weighted L2-hinge SVM (P$^2$WL2M) & SCAD, Lasso, MCP \\
+        \texttt{ppwsvm} & Penalized principal weighted SVM (P$^2$WSVM, MM-GCD) & SCAD, Lasso, MCP \\
+    \end{tabular}
+    \caption{Summary of main functions in \texttt{ppmSDR} and their penalty options.}
+\end{table}
+
+\section*{Unified Wrapper}
+
+\begin{itemize}
+    \item \texttt{ppm}: A unified wrapper function to fit any penalized PM estimator with a single interface. Selects loss, penalty, and method automatically via arguments.
+    \item Tuning functions (\texttt{tune\_pplssvm}, \texttt{tune\_ppalssvm}, etc.): Cross-validation for sparsity parameter (\texttt{lambda}) selection.
+\end{itemize}
+
+\section*{Example Usage}
+
+```r
+library(ppmSDR)
+
+# Generate data
+set.seed(1)
+n <- 200; p <- 10
+B <- matrix(0, p, 2); B[1,1] <- B[2,2] <- 1
+x <- MASS::mvrnorm(n, rep(0, p), diag(1, p))
+y <- (x %*% B[,1]/(0.5 + (x %*% B[,2] + 1)^2)) + 0.2*rnorm(n)
+
+# Fit penalized principal least squares SVM (P2LSM)
+fit <- pplssvm(x, y, H = 10, C = 1, lambda = 0.01, gamma = 3.7, penalty = "grSCAD", max.iter = 100)
+fit$evectors[,1:2]
+
+# Unified wrapper (any method)
+fit2 <- ppm(x, y, H = 10, C = 1, loss = "lssvm", penalty = "grSCAD", lambda = 0.01)
+fit2$evectors[,1:2]
+```
+
+\section*{References}
+
+\begin{itemize}
+    \item Shin, J., Shin, S. J. et al. (2024). ``A Unified and Computationally Efficient Approach to Sparse Sufficient Dimension Reduction via Penalized Principal Machines.'' (Submitted Manuscript)
+    \item See package documentation for additional references.
+\end{itemize}
+
