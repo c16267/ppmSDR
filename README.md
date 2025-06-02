@@ -1,9 +1,9 @@
 # ppmSDR: Penalized Principal Machine for Sparse Sufficient Dimension Reduction
-A unified and computationally efficient R package for sparse sufficient dimension reduction (SDR) using Penalized Principal Machines (P$^2$M) and Group Coordinate Descent (GCD).
+A unified and computationally efficient R package for sparse sufficient dimension reduction (SDR) using Penalized Principal Machines (P²M) and Group Coordinate Descent (GCD).
 
 ## Overview
 
-The **ppmSDR** package provides a unified interface and efficient algorithms for sparse sufficient dimension reduction (SDR) in regression and classification. It implements the **Penalized Principal Machine (P$^2$M)** family, generalizing principal support vector machine (PSVM) by allowing a wide range of convex loss functions and modern sparsity-inducing penalties.  
+The **ppmSDR** package provides a unified interface and efficient algorithms for sparse sufficient dimension reduction (SDR) in regression and classification. It implements the **Penalized Principal Machine (P²M)** family, generalizing principal support vector machine (PSVM) by allowing a wide range of convex loss functions and modern sparsity-inducing penalties.  
 Efficient computation is achieved via the Group Coordinate Descent (GCD) and MM-GCD algorithms, making the package scalable to large and high-dimensional data.
 
 ### Key Features
