@@ -1,0 +1,18 @@
+#' @useDynLib ppmSDR, .registration = TRUE
+#' @import MASS
+#' @import Matrix
+#' @import grpreg
+#' @importFrom stats cov glm model.matrix na.omit quantile relevel residuals rnorm
+#' @importFrom Matrix bdiag Diagonal
+
+export(ppm)
+export(pplssvm)
+export(ppwlssvm)
+export(ppsvm)
+export(ppwsvm)
+export(ppl2svm)
+export(ppwl2svm)
+export(pplr)
+export(ppwlr)
+export(ppasls)
+export(ppqr)

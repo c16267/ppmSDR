@@ -1,0 +1,28 @@
+Package: ppmSDR
+Type: Package
+Title: Penalized Principal Machine for Sufficient Dimension Reduction
+Version: 1.0.0
+Authors@R: c(person(given = "Jungmin",
+                    family = "Shin",
+                    role = c("aut", "cre"),
+                    email = "c16267@gmail.com"),
+             person(given = c("Seung", "Jun"),
+                    family = "Shin",
+                    role = "aut",
+                    email = "sjshin@korea.ac.kr"))
+Description: Provides a unified interface for computation-friendly penalized principal machine (P2PM) estimators for sufficient dimension reduction (SDR) in regression and classification. Includes state-of-the-art sparse SDR methods such as P2(W)LSM, P2(W)L2M, P2(W)LR, P2(W)SVM, P2QR, and P2AR.
+Depends: R (>= 4.1.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+    MASS,
+    Matrix,
+    grpreg
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Config/testthat/edition: 3
