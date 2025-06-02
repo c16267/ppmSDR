@@ -7,22 +7,20 @@ The **ppmSDR** package provides a unified interface and efficient algorithms for
 Efficient computation is achieved via the Group Coordinate Descent (GCD) and MM-GCD algorithms, making the package scalable to large and high-dimensional data.
 
 ### Key Features
+Unified interface for various penalized principal machine estimators (P²M), supporting both regression and classification
 
-- Unified interface for various penalized principal machine estimators (P$^2$M), supporting both regression and classification
-- Implements state-of-the-art sparse SDR methods:
-    - P$^2$LSM / P$^2$WLSM (Least Squares SVM, weighted)
-    - P$^2$LR / P$^2$WLR (Logistic, weighted)
-    - P$^2$L2M / P$^2$WL2M (L2-Hinge, weighted)
-    - P$^2$SVM / P$^2$WSVM (Hinge, weighted)
-    - P$^2$QR (Quantile regression)
-    - P$^2$AR (Asymmetric least squares)
-- Group SCAD, MCP, and Lasso penalties for row-wise sparsity and variable selection
-- Fast, scalable optimization (GCD, MM-GCD)
-- Cross-validation functions for penalty parameter tuning
-- Functions for simulation and real data analysis (Boston Housing, Wisconsin Breast Cancer)
-- Detailed documentation and examples
+Implements state-of-the-art sparse SDR methods:
+P²LSM / P²WLSM (Least Squares SVM, weighted)
+P²LR / P²WLR (Logistic, weighted)
+P²L2M / P²WL2M (L2-Hinge, weighted)
+P²SVM / P²WSVM (Hinge, weighted)
+P²QR (Quantile regression)
+P²AR (Asymmetric least squares)
 
----
+Group SCAD, MCP, and Lasso penalties for row-wise sparsity and variable selection
+Fast, scalable optimization (GCD, MM-GCD)
+Cross-validation functions for penalty parameter tuning
+Functions for simulation and real data analysis (Boston Housing, Wisconsin Breast Cancer)
 
 ## Installation
 
@@ -32,61 +30,59 @@ devtools::install_github("c16267/ppmSDR")
 ```
 
 
-\section*{Repository Structure}
+Repository Structure
+R/ : Core functions for penalized PM estimation and tuning
 
-\begin{itemize}
-    \item \textbf{R/} : Core functions for penalized PM estimation and tuning
-    \begin{itemize}
-        \item \texttt{fn\_pplssvm.R} : Penalized principal least squares SVM (\texttt{pplssvm})
-        \item \texttt{fn\_ppals.R} : Penalized principal asymmetric least squares (\texttt{ppalssvm})
-        \item \texttt{fn\_ppl2svm.R} : Penalized principal L2-hinge SVM (\texttt{ppl2svm})
-        \item \texttt{fn\_pplr.R} : Penalized principal logistic regression (\texttt{pplr})
-        \item \texttt{fn\_wpplr.R} : Weighted penalized principal logistic regression (\texttt{wpplr})
-        \item \texttt{fn\_spsdr.R} : Unified wrapper for penalized PMs (\texttt{spsvmSDR})
-        \item \texttt{fn\_test.R} : Example usage of \texttt{spsvmSDR}
-        \item \texttt{fn\_tune\_*.R} : Cross-validation for optimal lambda selection
-        \item \texttt{fn\_minor\_pPSDR.R} : Auxiliary functions (thresholding, etc.)
-        \item \texttt{fn\_penalized\_logit\_dc.R}, \texttt{fn\_sparse\_SIR.R}, \texttt{fn\_tune\_sparse\_SIR.R} : Other SDR competitors
-    \end{itemize}
-    \item \textbf{data/} : Example datasets (Boston Housing, Breast Cancer)
-    \item \textbf{simulation/} : Scripts to reproduce simulation studies
-    \begin{itemize}
-        \item \texttt{fn\_simulation\_continuous.R}
-        \item \texttt{fn\_simulation\_binary.R}
-        \item \texttt{fn\_simulation\_time\_n.R}
-    \end{itemize}
-\end{itemize}
+fn_pplssvm.R : Penalized principal least squares SVM (pplssvm)
 
-\section*{Main Functions}
+fn_ppals.R : Penalized principal asymmetric least squares (ppalssvm)
 
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{lll}
-        \textbf{Function} & \textbf{Description} & \textbf{Penalty Options} \\
-        \hline
-        \texttt{pplssvm} & Penalized principal least squares SVM (P$^2$LSM) & SCAD, Lasso, MCP \\
-        \texttt{ppalssvm} & Penalized principal asymmetric least squares (P$^2$AR) & SCAD, Lasso, MCP \\
-        \texttt{ppl2svm} & Penalized principal L2-hinge SVM (P$^2$L2M) & SCAD, Lasso, MCP \\
-        \texttt{pplr} & Penalized principal logistic regression (P$^2$LR) & SCAD, Lasso, MCP \\
-        \texttt{wpplr} & Weighted penalized principal logistic regression (P$^2$WLR) & SCAD, Lasso, MCP \\
-        \texttt{ppsvm} & Penalized principal SVM (P$^2$SVM, MM-GCD) & SCAD, Lasso, MCP \\
-        \texttt{ppqr} & Penalized principal quantile regression (P$^2$QR) & SCAD, Lasso, MCP \\
-        \texttt{ppwlssvm} & Penalized principal weighted least squares SVM (P$^2$WLSM) & SCAD, Lasso, MCP \\
-        \texttt{ppwlr} & Penalized principal weighted logistic regression (P$^2$WLR) & SCAD, Lasso, MCP \\
-        \texttt{ppwl2svm} & Penalized principal weighted L2-hinge SVM (P$^2$WL2M) & SCAD, Lasso, MCP \\
-        \texttt{ppwsvm} & Penalized principal weighted SVM (P$^2$WSVM, MM-GCD) & SCAD, Lasso, MCP \\
-    \end{tabular}
-    \caption{Summary of main functions in \texttt{ppmSDR} and their penalty options.}
-\end{table}
+fn_ppl2svm.R : Penalized principal L2-hinge SVM (ppl2svm)
 
-\section*{Unified Wrapper}
+fn_pplr.R : Penalized principal logistic regression (pplr)
 
-\begin{itemize}
-    \item \texttt{ppm}: A unified wrapper function to fit any penalized PM estimator with a single interface. Selects loss, penalty, and method automatically via arguments.
-    \item Tuning functions (\texttt{tune\_pplssvm}, \texttt{tune\_ppalssvm}, etc.): Cross-validation for sparsity parameter (\texttt{lambda}) selection.
-\end{itemize}
+fn_wpplr.R : Weighted penalized principal logistic regression (wpplr)
 
-\section*{Example Usage}
+fn_spsdr.R : Unified wrapper for penalized PMs (spsvmSDR)
+
+fn_test.R : Example usage of spsvmSDR
+
+fn_tune_*.R : Cross-validation for optimal lambda selection
+
+fn_minor_pPSDR.R : Auxiliary functions (thresholding, etc.)
+
+fn_penalized_logit_dc.R, fn_sparse_SIR.R, fn_tune_sparse_SIR.R : Other SDR competitors
+
+data/ : Example datasets (Boston Housing, Breast Cancer)
+
+simulation/ : Scripts to reproduce simulation studies
+
+fn_simulation_continuous.R
+
+fn_simulation_binary.R
+
+fn_simulation_time_n.R
+
+## Main Functions
+
+| Function   | Description                                              | Penalty Options  |
+| ---------- | -------------------------------------------------------- | ---------------- |
+| `pplssvm`  | Penalized principal least squares SVM (P²LSM)            | SCAD, Lasso, MCP |
+| `ppalssvm` | Penalized principal asymmetric least squares (P²AR)      | SCAD, Lasso, MCP |
+| `ppl2svm`  | Penalized principal L2-hinge SVM (P²L2M)                 | SCAD, Lasso, MCP |
+| `pplr`     | Penalized principal logistic regression (P²LR)           | SCAD, Lasso, MCP |
+| `wpplr`    | Weighted penalized principal logistic regression (P²WLR) | SCAD, Lasso, MCP |
+| `ppsvm`    | Penalized principal SVM (P²SVM, MM-GCD)                  | SCAD, Lasso, MCP |
+| `ppqr`     | Penalized principal quantile regression (P²QR)           | SCAD, Lasso, MCP |
+| `ppwlssvm` | Penalized principal weighted least squares SVM (P²WLSM)  | SCAD, Lasso, MCP |
+| `ppwlr`    | Penalized principal weighted logistic regression (P²WLR) | SCAD, Lasso, MCP |
+| `ppwl2svm` | Penalized principal weighted L2-hinge SVM (P²WL2M)       | SCAD, Lasso, MCP |
+| `ppwsvm`   | Penalized principal weighted SVM (P²WSVM, MM-GCD)        | SCAD, Lasso, MCP |
+
+### Unified Wrapper
+ppm: A unified wrapper function to fit any penalized PM estimator with a single interface. Selects loss, penalty, and method automatically via arguments.
+
+## Example Usage
 
 ```r
 library(ppmSDR)
