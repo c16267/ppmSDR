@@ -30,54 +30,45 @@ devtools::install_github("c16267/ppmSDR")
 ```
 
 
-Repository Structure
-R/ : Core functions for penalized PM estimation and tuning
+### Repository Structure
 
-fn_pplssvm.R : Penalized principal least squares SVM (pplssvm)
+1. R/ : Core functions for penalized PM estimation and tuning
+ - fn_pplssvm.R : Penalized principal least squares SVM (pplssvm)
+ - fn_ppwlssvm.R : Penalized principal weighted least squares SVM (ppwlssvm)
+ - fn_ppasls.R : Penalized principal asymmetric least squares (ppasls)
+ - fn_ppqr.R : Penalized principal quantile regression (ppqr)
+ - fn_ppl2svm.R : Penalized principal L2-hinge SVM (ppl2svm)
+ - fn_ppwl2svm.R : Penalized principal weighted L2-hinge SVM (ppwl2svm)
+ - fn_pplr.R : Penalized principal logistic regression (pplr)
+ - fn_ppwlr.R : Penalized principal weighted logistic regression (ppwlr)
+ - fn_ppsvm.R : Penalized principal support vector machine (ppsvm)
+ - fn_ppwsvm.R : Penalized principal weighted support vector machine (ppwsvm)
+ - fn_minor_pPSDR.R : Auxiliary functions (thresholding, etc.)
 
-fn_ppals.R : Penalized principal asymmetric least squares (ppalssvm)
+2. data/ : Example datasets
+Boston Housing
+Breast Cancer
 
-fn_ppl2svm.R : Penalized principal L2-hinge SVM (ppl2svm)
-
-fn_pplr.R : Penalized principal logistic regression (pplr)
-
-fn_wpplr.R : Weighted penalized principal logistic regression (wpplr)
-
-fn_spsdr.R : Unified wrapper for penalized PMs (spsvmSDR)
-
-fn_test.R : Example usage of spsvmSDR
-
-fn_tune_*.R : Cross-validation for optimal lambda selection
-
-fn_minor_pPSDR.R : Auxiliary functions (thresholding, etc.)
-
-fn_penalized_logit_dc.R, fn_sparse_SIR.R, fn_tune_sparse_SIR.R : Other SDR competitors
-
-data/ : Example datasets (Boston Housing, Breast Cancer)
-
-simulation/ : Scripts to reproduce simulation studies
-
+3. simulation/ : Scripts to reproduce simulation studies
 fn_simulation_continuous.R
-
 fn_simulation_binary.R
-
 fn_simulation_time_n.R
 
 ## Main Functions
 
-| Function   | Description                                              | Penalty Options  |
-| ---------- | -------------------------------------------------------- | ---------------- |
-| `pplssvm`  | Penalized principal least squares SVM (P²LSM)            | SCAD, Lasso, MCP |
-| `ppalssvm` | Penalized principal asymmetric least squares (P²AR)      | SCAD, Lasso, MCP |
-| `ppl2svm`  | Penalized principal L2-hinge SVM (P²L2M)                 | SCAD, Lasso, MCP |
-| `pplr`     | Penalized principal logistic regression (P²LR)           | SCAD, Lasso, MCP |
-| `wpplr`    | Weighted penalized principal logistic regression (P²WLR) | SCAD, Lasso, MCP |
-| `ppsvm`    | Penalized principal SVM (P²SVM, MM-GCD)                  | SCAD, Lasso, MCP |
-| `ppqr`     | Penalized principal quantile regression (P²QR)           | SCAD, Lasso, MCP |
-| `ppwlssvm` | Penalized principal weighted least squares SVM (P²WLSM)  | SCAD, Lasso, MCP |
-| `ppwlr`    | Penalized principal weighted logistic regression (P²WLR) | SCAD, Lasso, MCP |
-| `ppwl2svm` | Penalized principal weighted L2-hinge SVM (P²WL2M)       | SCAD, Lasso, MCP |
-| `ppwsvm`   | Penalized principal weighted SVM (P²WSVM, MM-GCD)        | SCAD, Lasso, MCP |
+| Function   | Description                                              | 
+| ---------- | -------------------------------------------------------- |
+| `pplssvm`  | Penalized principal least squares SVM (P²LSM)            |
+| `ppalssvm` | Penalized principal asymmetric least squares (P²AR)      |
+| `ppl2svm`  | Penalized principal L2-hinge SVM (P²L2M)                 |
+| `pplr`     | Penalized principal logistic regression (P²LR)           |
+| `wpplr`    | Weighted penalized principal logistic regression (P²WLR) |
+| `ppsvm`    | Penalized principal SVM (P²SVM, MM-GCD)                  |
+| `ppqr`     | Penalized principal quantile regression (P²QR)           |
+| `ppwlssvm` | Penalized principal weighted least squares SVM (P²WLSM)  |
+| `ppwlr`    | Penalized principal weighted logistic regression (P²WLR) |
+| `ppwl2svm` | Penalized principal weighted L2-hinge SVM (P²WL2M)       |
+| `ppwsvm`   | Penalized principal weighted SVM (P²WSVM, MM-GCD)        |
 
 ### Unified Wrapper
 ppm: A unified wrapper function to fit any penalized PM estimator with a single interface. Selects loss, penalty, and method automatically via arguments.
