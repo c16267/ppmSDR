@@ -107,20 +107,18 @@ fit2 <- ppm(x, y, H = 10, C = 1, loss = "lssvm", penalty = "grSCAD", lambda = 0.
 fit2$evectors[,1:2]
 ```
 
-\section*{References}
-\section*{References}
+## References
 
-\begin{itemize}
-    \item Artemiou, A. and Dong, Y. (2016). Sufficient dimension reduction via principal lq support vector machine, \textit{Electronic Journal of Statistics}, 10: 783–805.
-    \item Artemiou, A., Dong, Y. and Shin, S. J. (2021). Real-time sufficient dimension reduction through principal least squares support vector machines, \textit{Pattern Recognition}, 112: 107768.
-    \item Fan, J. and Li, R. (2001). Variable selection via nonconcave penalized likelihood and its oracle properties, \textit{Journal of the American Statistical Association}, 96: 1348–1360.
-    \item Hunter, D. R. and Lange, K. (2004). A tutorial on MM algorithms, \textit{The American Statistician}, 58(1): 30–37.
-    \item Jang, H. J., Shin, S. J. and Artemiou, A. (2023). Principal weighted least square support vector machine: An online dimension-reduction tool for binary classification, \textit{Computational Statistics \& Data Analysis}, 187: 107818.
-    \item Kim, B. and Shin, S. J. (2019). Principal weighted logistic regression for sufficient dimension reduction in binary classification, \textit{Journal of the Korean Statistical Society}, 48(2): 194–206.
-    \item Li, B., Artemiou, A. and Li, L. (2011). Principal support vector machines for linear and nonlinear sufficient dimension reduction, \textit{Annals of Statistics}, 39(6): 3182–3210.
-    \item Shin, J. and Shin, S. J. (2024). A concise overview of principal support vector machines and its generalization, \textit{Communications for Statistical Applications and Methods}, 31(2): 235–246.
-    \item Shin, J., Shin, S. J. and Artemiou, A. (2024). The R package psvmsdr: A unified algorithm for sufficient dimension reduction via principal machines, \textit{arXiv preprint arXiv:2409.01547}.
-    \item Shin, S. J. and Artemiou, A. (2017). Penalized principal logistic regression for sparse sufficient dimension reduction, \textit{Computational Statistics \& Data Analysis}, 111: 48–58.
-\end{itemize}
+- Artemiou, A. and Dong, Y. (2016). Sufficient dimension reduction via principal lq support vector machine, *Electronic Journal of Statistics*, 10: 783–805.
+- Artemiou, A., Dong, Y. and Shin, S. J. (2021). Real-time sufficient dimension reduction through principal least squares support vector machines, *Pattern Recognition*, 112: 107768.
+- Fan, J. and Li, R. (2001). Variable selection via nonconcave penalized likelihood and its oracle properties, *Journal of the American Statistical Association*, 96: 1348–1360.
+- Hunter, D. R. and Lange, K. (2004). A tutorial on MM algorithms, *The American Statistician*, 58(1): 30–37.
+- Jang, H. J., Shin, S. J. and Artemiou, A. (2023). Principal weighted least square support vector machine: An online dimension-reduction tool for binary classification, *Computational Statistics & Data Analysis*, 187: 107818.
+- Kim, B. and Shin, S. J. (2019). Principal weighted logistic regression for sufficient dimension reduction in binary classification, *Journal of the Korean Statistical Society*, 48(2): 194–206.
+- Li, B., Artemiou, A. and Li, L. (2011). Principal support vector machines for linear and nonlinear sufficient dimension reduction, *Annals of Statistics*, 39(6): 3182–3210.
+- Shin, J. and Shin, S. J. (2024). A concise overview of principal support vector machines and its generalization, *Communications for Statistical Applications and Methods*, 31(2): 235–246.
+- Shin, J., Shin, S. J. and Artemiou, A. (2024). The R package psvmsdr: A unified algorithm for sufficient dimension reduction via principal machines, *arXiv preprint arXiv:2409.01547*.
+- Shin, S. J. and Artemiou, A. (2017). Penalized principal logistic regression for sparse sufficient dimension reduction, *Computational Statistics & Data Analysis*, 111: 48–58.
+
 
 
