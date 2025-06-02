@@ -59,10 +59,9 @@ fn_simulation_time_n.R
 | Function   | Description                                              | 
 | ---------- | -------------------------------------------------------- |
 | `pplssvm`  | Penalized principal least squares SVM (P²LSM)            |
-| `ppalssvm` | Penalized principal asymmetric least squares (P²AR)      |
+| `ppasls`   | Penalized principal asymmetric least squares (P²AR)      |
 | `ppl2svm`  | Penalized principal L2-hinge SVM (P²L2M)                 |
 | `pplr`     | Penalized principal logistic regression (P²LR)           |
-| `wpplr`    | Weighted penalized principal logistic regression (P²WLR) |
 | `ppsvm`    | Penalized principal SVM (P²SVM, MM-GCD)                  |
 | `ppqr`     | Penalized principal quantile regression (P²QR)           |
 | `ppwlssvm` | Penalized principal weighted least squares SVM (P²WLSM)  |
