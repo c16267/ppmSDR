@@ -48,9 +48,13 @@ devtools::install_github("c16267/ppmSDR")
 2. data/ : Example datasets (Boston Housing and Diagnostic Wisconsin Breast Cancer)
 
 3. simulation/ : Scripts to reproduce simulation studies
- - fn_simulation_continuous.R
- - fn_simulation_binary.R
- - fn_simulation_time_n.R
+ - fn_boston_housing_continuous.R
+ - fn_fig1a.R
+ - fn_fig1b.R
+ - fn_fig1c.R
+ - fn_simulation_binary_table2.R
+ - fn_simulation_continuous_table1.R
+ - fn_wdbc_binary.R
 
 ## Main Functions
 
