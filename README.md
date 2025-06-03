@@ -45,14 +45,12 @@ devtools::install_github("c16267/ppmSDR")
  - fn_ppwsvm.R : Penalized principal weighted support vector machine (ppwsvm)
  - fn_minor_pPSDR.R : Auxiliary functions (thresholding, etc.)
 
-2. data/ : Example datasets
-Boston Housing
-Breast Cancer
+2. data/ : Example datasets (Boston Housing and Diagnostic Wisconsin Breast Cancer)
 
 3. simulation/ : Scripts to reproduce simulation studies
-fn_simulation_continuous.R
-fn_simulation_binary.R
-fn_simulation_time_n.R
+ - fn_simulation_continuous.R
+ - fn_simulation_binary.R
+ - fn_simulation_time_n.R
 
 ## Main Functions
 
