@@ -73,6 +73,8 @@ devtools::install_github("c16267/ppmSDR")
 
 ### Unified Wrapper
 ppm: A unified wrapper function to fit any penalized PM estimator with a single interface. Selects loss, penalty, and method automatically via arguments.
+- See more details in vignette file vignette_ppmSDR.pdf
+- More detail syntax usages are found in ppmSDR.pdf
 
 ## Example Usage
 
@@ -94,6 +96,7 @@ fit$evectors[,1:2]
 fit2 <- ppm(x, y, H = 10, C = 1, loss = "lssvm", penalty = "grSCAD", lambda = 0.01)
 fit2$evectors[,1:2]
 ```
+
 
 ## References
 
