@@ -73,7 +73,7 @@ devtools::install_github("c16267/ppmSDR")
 
 ### Unified Wrapper
 ppm: A unified wrapper function to fit any penalized PM estimator with a single interface. Selects loss, penalty, and method automatically via arguments.
-- See more details in vignette file [vignette_ppmSDR.pdf]([https://www.rstudio.com](https://github.com/c16267/ppmSDR/blob/main/vignette_ppmSDR.pdf))
+- See more details in vignette file [vignette_ppmSDR.pdf](https://github.com/c16267/ppmSDR/blob/main/vignette_ppmSDR.pdf)
 - More detail syntax usages are found in [ppmSDR.pdf](https://github.com/c16267/ppmSDR/blob/main/ppmSDR.pdf)
 
 ## Example Usage
