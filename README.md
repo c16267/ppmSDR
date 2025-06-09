@@ -79,6 +79,7 @@ ppm: A unified wrapper function to fit any penalized PM estimator with a single 
 ## Example Usage
 
 ```r
+# Belows are the codes for recovering the basis matrix B for the central subspace via different methods.
 library(ppmSDR)
 
 # Generate data
