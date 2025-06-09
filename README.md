@@ -83,10 +83,11 @@ library(ppmSDR)
 
 # Generate data
 set.seed(1)
-n <- 200; p <- 10
+n <- 1000; p <- 10
 B <- matrix(0, p, 2); B[1,1] <- B[2,2] <- 1
 x <- MASS::mvrnorm(n, rep(0, p), diag(1, p))
 y <- (x %*% B[,1]/(0.5 + (x %*% B[,2] + 1)^2)) + 0.2*rnorm(n)
+y.binary <- sign(y)
 
 # Fit penalized principal least squares SVM (P2LSM)
 fit <- pplssvm(x, y, H = 10, C = 1, lambda = 0.01, gamma = 3.7, penalty = "grSCAD", max.iter = 100)
@@ -95,6 +96,16 @@ fit$evectors[,1:2]
 # Unified wrapper (any method)
 fit2 <- ppm(x, y, H = 10, C = 1, loss = "lssvm", penalty = "grSCAD", lambda = 0.01)
 fit2$evectors[,1:2]
+
+
+# For P2SVM
+fit3 <- ppm(x, y, H = 10, C = 100, loss = "svm", penalty = "grSCAD", lambda = 0.00003)
+fit3$evectors[,1:2]
+
+
+# For PSDR in a binary classification via P2WLR
+fit4 <- ppm(x, y.binary, H = 10, C = 10, loss = "wlogit", penalty = "grSCAD", lambda = 0.025)
+fit4$evectors[,1:2]
 ```
 
 
