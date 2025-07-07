@@ -79,7 +79,7 @@ y <- scale(Y)
 
 max.iter <- maxiter <- 100
 H <- 10
-h <- 3
+h <- 10
 C <- 1
 lambda <- 0.3
 gamma <- 3.7; penalty <- 'grSCAD'; log.lambda <- FALSE;
