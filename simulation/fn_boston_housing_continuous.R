@@ -136,29 +136,29 @@ for(d in 1:dim(x)[2]){
       
       
       # 2.PLR
-      B2 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.5, max.iter=20,loss='logit')$evectors
+      B2 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.5, max.iter=maxiter,loss='logit')$evectors
       round(B2, 2)
 
       
       # 3. PLS-SVM
-      B3 <- psdr(x_tr, y_tr, h=h, lambda=0.5,max.iter=20, loss='lssvm')$evectors
+      B3 <- psdr(x_tr, y_tr, h=h, lambda=0.5,max.iter=maxiter, loss='lssvm')$evectors
       round(B3, 2)
       
       # 4. PALS-SVM
-      B4 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.5, max.iter=20, loss="asls")$evectors
+      B4 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.5, max.iter=maxiter, loss="asls")$evectors
       round(B4,2)
       
       # 5. PL2-SVM
-      B5 <- psdr(x=x_tr, y=y_tr, h=h,lambda=0.3, max.iter=20, loss="l2svm")$evectors
+      B5 <- psdr(x=x_tr, y=y_tr, h=h,lambda=0.3, max.iter=maxiter, loss="l2svm")$evectors
       round(B5,2)
       
       # 6. PSVM
-      B6 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.5, max.iter=20, loss="svm")$evectors
+      B6 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.5, max.iter=maxiter, loss="svm")$evectors
       round(B6,2)
       
       
       # 7. PQR
-      B7 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.3, max.iter=50, loss="qr")$evectors
+      B7 <- psdr(x=x_tr, y=y_tr, h=h, lambda=0.3, max.iter=maxiter, loss="qr")$evectors
       round(B7,2)
       
       
@@ -174,7 +174,7 @@ for(d in 1:dim(x)[2]){
       
       
       # 9. PPLR-SVM
-      nlambda <- 20; lambda.max <- 0.000001; n.fold = 2; 
+      nlambda <- 20; lambda.max <- 0.000001; n.fold = 3; 
       lambda_grid_plogit <- seq(0.000015, 0.000055, length = 20)
       best_lambda_plogit <- tryCatch(tune.pplr(x=x_tr, y=y_tr, d=d, H=H, C=40, lambda.grid=lambda_grid_plogit, n.fold=n.fold, penalty = "grSCAD", max.iter=maxiter, gamma=3.7)$opt.lambda, error = function(e) best_lambda_plogit)
       B9 <- tryCatch(pplr(x=x_tr, y=y_tr, H=H, C=40, lambda=best_lambda_plogit, penalty="grSCAD", tol = 1.0e-5, max.iter=maxiter)$evectors, error = function(e) B9)
@@ -183,7 +183,7 @@ for(d in 1:dim(x)[2]){
       
       # 10. PPLS-SVM
       lambda_grid_ppls <- seq(0.01, 0.6, length = 10)
-      best_lambda_ppls <- tryCatch(tune.pplssvm(x=x_tr, y=y_tr, d=d, H=H, C=1, lambda.grid = lambda_grid_ppls, gamma=3.7, penalty="grSCAD", max.iter=maxiter, n.fold=2)$opt.lambda, error = function(e) best_lambda_ppls)
+      best_lambda_ppls <- tryCatch(tune.pplssvm(x=x_tr, y=y_tr, d=d, H=H, C=1, lambda.grid = lambda_grid_ppls, gamma=3.7, penalty="grSCAD", max.iter=maxiter, n.fold=3)$opt.lambda, error = function(e) best_lambda_ppls)
       B10 <- tryCatch(pplssvm_nopack(x=x_tr, y=y_tr, H, C=2, lambda=best_lambda_ppls, gamma=3.7, penalty='grSCAD', max.iter)$evectors, error = function(e) B10)
       round(B10, 2)
       
@@ -191,7 +191,7 @@ for(d in 1:dim(x)[2]){
       # 11. PPALS-SVM
       nlambda <- 20; lambda.max <- 0.0001; n.fold =3;
       lambda_grid_ppals <- seq(0.05, 0.2, length = 10)
-      best_lambda_ppals <- tryCatch(tune.ppasls(x=x_tr, y=y_tr, d=d, H, C=1, lambda.grid=lambda_grid_ppals, gamma=3.7, penalty='grSCAD', max.iter, n.fold=2)$opt.lambda, error = function(e) best_lambda_ppals)
+      best_lambda_ppals <- tryCatch(tune.ppasls(x=x_tr, y=y_tr, d=d, H, C=1, lambda.grid=lambda_grid_ppals, gamma=3.7, penalty='grSCAD', max.iter, n.fold=3)$opt.lambda, error = function(e) best_lambda_ppals)
       B11 <- tryCatch(ppasls(x=x_tr, y=y_tr, H, C=1, lambda=best_lambda_ppals, gamma=3.7, penalty='grSCAD', max.iter=maxiter)$evectors, error = function(e) B11)
       round(B11, 5)
 
@@ -199,7 +199,7 @@ for(d in 1:dim(x)[2]){
       # 12. PPL2-SVM
       nlambda <- 20; lambda.max <- 0.0001; n.fold =3;
       lambda_grid_ppl2svm <- seq(0.1, 0.3, length = 10)
-      best_lambda_ppl2svm <- tryCatch(tune.ppl2svm(x=x_tr, y=y_tr, d=d, H, C=1, lambda.grid=lambda_grid_ppl2svm, gamma=3.7, penalty='grSCAD', max.iter, n.fold=2)$opt.lambda, error = function(e) best_lambda_ppl2svm)
+      best_lambda_ppl2svm <- tryCatch(tune.ppl2svm(x=x_tr, y=y_tr, d=d, H, C=1, lambda.grid=lambda_grid_ppl2svm, gamma=3.7, penalty='grSCAD', max.iter, n.fold=3)$opt.lambda, error = function(e) best_lambda_ppl2svm)
       B12 <- tryCatch(ppl2svm(x=x_tr, y=y_tr, H, C=1, lambda=best_lambda_ppl2svm, gamma=3.7, penalty='grSCAD', max.iter=maxiter)$evectors, error = function(e) B12)
       round(B12, 5)
       
@@ -207,7 +207,7 @@ for(d in 1:dim(x)[2]){
       # 13. PPSVM
       nlambda <- 20; lambda.max <- 0.000001; n.fold =3;
       lambda_grid_ppsvm <- seq(0.000015, 0.000025, length = 10)
-      best_lambda_ppsvm <- tryCatch(tune.ppsvm(x=x_tr, y=y_tr, d=d, H, C=10, lambda.grid=lambda_grid_ppsvm, gamma=3.7, penalty='grSCAD', max.iter, n.fold=2)$opt.lambda, error = function(e) best_lambda_ppsvm)
+      best_lambda_ppsvm <- tryCatch(tune.ppsvm(x=x_tr, y=y_tr, d=d, H, C=10, lambda.grid=lambda_grid_ppsvm, gamma=3.7, penalty='grSCAD', max.iter, n.fold=3)$opt.lambda, error = function(e) best_lambda_ppsvm)
       B13 <- tryCatch(ppsvm(x=x_tr, y=y_tr, H, C=3, lambda=best_lambda_ppsvm, gamma=3.7, penalty='grSCAD', max.iter=maxiter)$evectors, error = function(e) B13)
       round(B13, 5)
       
@@ -215,7 +215,7 @@ for(d in 1:dim(x)[2]){
       # 14. PPQR
       nlambda <- 20; lambda.max <- 0.0000001; n.fold =3;
       lambda_grid_ppqr <- seq(0.000000015, 0.000000025, length = 20)
-      best_lambda_ppqr <- tryCatch(tune.ppqr(x=x_tr, y=y_tr, d=d, H, C=10, lambda.grid=lambda_grid_ppsvm, gamma=3.7, penalty='grSCAD', max.iter, n.fold=2, tol=1.0e-5)$opt.lambda, error = function(e) best_lambda_ppqr)
+      best_lambda_ppqr <- tryCatch(tune.ppqr(x=x_tr, y=y_tr, d=d, H, C=10, lambda.grid=lambda_grid_ppsvm, gamma=3.7, penalty='grSCAD', max.iter, n.fold=3)$opt.lambda, error = function(e) best_lambda_ppqr)
       B14 <- tryCatch(ppqr(x=x_tr, y=y_tr, H, C=1, lambda=best_lambda_ppqr, gamma=3.7, penalty='grSCAD', max.iter=maxiter)$evectors, error = function(e) B14)
       round(B14, 5)
       
