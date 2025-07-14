@@ -43,7 +43,7 @@ source('fn_pplr.R')
 source('fn_pplr_DC.R')
 
 
-n.grid <- seq(10000, 100000, by=10000)
+n.grid <- seq(1000, 10000, by=1000)
 temp <- matrix(0,length(n.grid), 3)
 temp[,2] <- c(rep(3,length(n.grid)))
 temp[,3] <- n.grid
@@ -64,7 +64,7 @@ for (a in 1:nrow(temp)) {
   case <- temp[a,2]
   p   <- 10
   max.iter <- maxiter <- 30
-  H <- 3
+  H <- 10
   h <- 1.0e-5; eps <- 1.0e-5
   C <- 1
   delta <- 0.1
@@ -118,56 +118,3 @@ for (a in 1:nrow(temp)) {
   time.list[[a]] <- time_mat
   
 }
-
-time.wide <- rbind(time.list[[1]], time.list[[2]],time.list[[3]], time.list[[4]], time.list[[5]], time.list[[6]], time.list[[7]], time.list[[8]], time.list[[9]],
-                   time.list[[10]])
-colnames(time.wide) <- c("P" %p% supsc("2") %p% "LR" %p% "-DC" ,"P" %p% supsc("2") %p% "LR" %p% "-GCD")   
-method_name <- c("P" %p% supsc("2") %p% "LR" %p% "-DC" ,"P" %p% supsc("2") %p% "LR" %p% "-GCD")   
-mean.table <- matrix(, ncol=2, nrow=length(n.grid))
-var.table <- matrix(, ncol=2, nrow=length(n.grid))
-n.sim <- nrow(time.list[[1]])
-
-for(i in 1:length(n.grid)){
-  mean.table[i,] <- colMeans(time.wide[((i-1)*n.sim+1):(i*n.sim),])
-  var.table[i,] <- apply(time.wide[((i-1)*n.sim+1):(i*n.sim),], 2, 'sd')/sqrt(n.sim)
-}
-
-
-colnames(mean.table) <- method_name
-colnames(var.table) <- method_name
-var.table <- data.frame(var.table)
-colnames(var.table) <- method_name
-
-time.wide <- cbind(mean.table, n.grid <- seq(10000, 100000, by=10000))
-colnames(time.wide) <- c(method_name, "n")
-
-df.time.wide <- data.frame(time.wide)
-colnames(df.time.wide) <- c(method_name, "n")
-
-time_mat_long <- gather(df.time.wide, key="method", value="time", 1:2, factor_key=TRUE)
-
-
-
-################################################################################################
-par(mar=c(5,5,5,5),oma=c(1,1,1,1))
-plot(df.time.wide$n, df.time.wide$`P²LR-DC`, col='blue', lty=2, type='b',
-     xlab ="sample size", ylab = "Execution time in second", lwd=2.2, xaxt='n', cex.lab=1.5, pch=19, ylim=c(0, max(df.time.wide$`P²LR-DC`)))
-axis(1, at=df.time.wide$n, las=1, cex=1.5, labels=c("10K", "20K", "30K", "40K", "50K", "60K","70K","80K","90K","100K"))
-lines(df.time.wide$n, df.time.wide$`P²LR-GCD`, col='red', lty=3, type='b', lwd=2.2, pch=6)
-
-lines(df.time.wide$n, df.time.wide$`P²LR-DC` + 2*var.table$`P²LR-DC`, col='blue3', lty=5, lwd=1.2)
-lines(df.time.wide$n, df.time.wide$`P²LR-DC` - 2*var.table$`P²LR-DC`, col='blue3', lty=5, lwd=1.2)
-
-lines(df.time.wide$n, df.time.wide$`P²LR-GCD` + 2*var.table$`P²LR-GCD`, col='red', lty=5, lwd=1.2)
-lines(df.time.wide$n, df.time.wide$`P²LR-GCD` - 2*var.table$`P²LR-GCD`, col='red', lty=5, lwd=1.2)
-
-
-grid(nx = NULL, ny = NULL,
-     lty = 2,      # Grid line type
-     col = "gray", # Grid line color
-     lwd = 1)      # Grid line width
-legend("topleft", legend=c(expression("P"^2~"LR-DC"), expression("P"^2~"LR-GCD")),
-       col=c("blue",  "red"), lty=c(2,3), cex=1.3, lwd=2, pch=c(19,6))
-
-
-################################################################################################
