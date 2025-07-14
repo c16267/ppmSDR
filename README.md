@@ -104,8 +104,8 @@ fit3 <- ppm(x, y, H = 10, C = 100, loss = "svm", penalty = "grSCAD", lambda = 0.
 fit3$evectors[,1:2]
 
 
-# For PSDR in a binary classification via P2WLR
-fit4 <- ppm(x, y.binary, H = 10, C = 10, loss = "wlogit", penalty = "grSCAD", lambda = 0.025)
+# For PSDR in a binary classification via P2WLSSVM
+fit4 <- ppm(x, y.binary, H = 10, C = 1, loss = "wlssvm", penalty = "grSCAD", lambda = 0.0008)
 fit4$evectors[,1:2]
 ```
 
