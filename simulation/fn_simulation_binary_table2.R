@@ -65,8 +65,6 @@ colnames(temp) <- c("model","case","p")
 fnorm_list <- vector("list", 7)
 fnorm_list_q1 <- vector("list", 7)
 
-a=1;ii=1
-
 for (a in 1:nrow(temp)) {
   
   n <- 1000 # sample size
