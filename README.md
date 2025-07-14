@@ -60,6 +60,7 @@ devtools::install_github("c16267/ppmSDR")
 
 | Function   | Description                                              | 
 | ---------- | -------------------------------------------------------- |
+| `ppm`      | A unified wrapper function to fit any penalized PM       |
 | `pplssvm`  | Penalized principal least squares SVM (P²LSM)            |
 | `ppasls`   | Penalized principal asymmetric least squares (P²AR)      |
 | `ppl2svm`  | Penalized principal L2-hinge SVM (P²L2M)                 |
@@ -74,7 +75,12 @@ devtools::install_github("c16267/ppmSDR")
 ### Unified Wrapper
 ppm: A unified wrapper function to fit any penalized PM estimator with a single interface. Selects loss, penalty, and method automatically via arguments.
 - See more details in vignette file [vignette_ppmSDR.pdf](https://github.com/c16267/ppmSDR/blob/main/vignette_ppmSDR.pdf)
-- More detail syntax usages are found in [ppmSDR.pdf](https://github.com/c16267/ppmSDR/blob/main/ppmSDR.pdf)
+- More detailed syntax usages are found in [ppmSDR.pdf](https://github.com/c16267/ppmSDR/blob/main/ppmSDR.pdf)
+
+```r
+#Basic syntax
+pplssvm(x, y, H = 10, C = 1, lambda = 0.01, gamma = 3.7, penalty = "grSCAD", max.iter = 100)
+```
 
 ## Example Usage
 
