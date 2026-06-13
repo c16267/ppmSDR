@@ -1,0 +1,197 @@
+---
+title: "Sparse Sufficient Dimension Reduction via Penalized Principal Machines"
+author:
+  - Jungmin Shin (The Ohio State University)
+  - Seung Jun Shin (Korea University)
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::pdf_document:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Sparse Sufficient Dimension Reduction via Penalized Principal Machines}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(ppmSDR)
+```
+
+# Introduction
+
+Sufficient dimension reduction (SDR) reduces the dimensionality of predictors
+$\mathbf{X}$ while preserving their relationship with a response $Y$. SDR
+estimates a basis $\mathbf{B}$ of the *central subspace*
+$\mathcal{S}_{Y\mid\mathbf{X}}$ defined by
+$$
+Y \perp \mathbf{X} \mid \mathbf{B}^\top \mathbf{X}.
+$$
+In high dimensions, **sparse SDR** improves interpretability and accuracy by
+driving many rows of $\mathbf{B}$ to zero, which is achieved by adding a
+sparsity-inducing penalty to the SDR optimization problem.
+
+The **ppmSDR** package implements a unified framework for sparse SDR based on
+the penalized principal machine ($\mathrm{P}^2\mathrm{M}$). A single front-end,
+`ppm()`, dispatches to ten loss-specific estimators, all fitted by one group
+coordinate descent (GCD) engine, and `ppm_tune()` selects the sparsity
+parameter by cross-validation.
+
+# Penalized Principal Machines
+
+## Principal machine
+
+Given data $(y_i, \mathbf{x}_i) \in \mathbb{R} \times \mathbb{R}^p$ with
+centered predictors, and a sequence of cutoffs $r_1 < \cdots < r_h$, the sample
+principal machine solves
+$$
+(\beta_{0k}, \boldsymbol{\beta}_k) =
+\arg\min_{\beta_0, \boldsymbol{\beta}}
+\boldsymbol{\beta}^\top \hat{\Sigma} \boldsymbol{\beta}
++ \frac{c}{n} \sum_{i=1}^n
+L_k\!\left(\tilde{y}_{ik}, \beta_0 + \boldsymbol{\beta}^\top \mathbf{x}_i\right),
+\quad k = 1, \ldots, h,
+$$
+where $\hat{\Sigma} = \sum_i \mathbf{x}_i \mathbf{x}_i^\top / n$. The basis
+$\hat{\mathbf{B}}$ is estimated by the leading $d$ eigenvectors of
+$\sum_{k=1}^h \hat{\boldsymbol{\beta}}_k \hat{\boldsymbol{\beta}}_k^\top$.
+
+- For the **response-based PM (RPM)**,
+  $\tilde{y}_{ik} = \mathbb{I}\{y_i \ge r_k\} - \mathbb{I}\{y_i < r_k\}$ and the
+  loss $L_k$ is fixed across cutoffs.
+- For the **loss-based PM (LPM)**, the loss $L_k$ varies with $r_k$ while
+  $\tilde{y}_{ik}$ is fixed at $y_i$.
+
+## Penalized estimation
+
+Under the sparsity assumption the slopes $\boldsymbol{\beta}_k$ share a common
+support across $k$, leading to the row-group penalized objective
+$$
+\sum_{k=1}^{h}
+\left[
+\boldsymbol{\beta}_k^\top \hat{\Sigma} \boldsymbol{\beta}_k
++ \frac{c}{n} \sum_{i=1}^n
+L_k(\tilde{y}_{ik}, \beta_{0k} + \boldsymbol{\beta}_k^\top \mathbf{x}_i)
+\right]
++ \sum_{j=1}^{p} p_{\lambda}\!\left(\|\boldsymbol{\beta}_{(j)}\|_2\right),
+$$
+where $\boldsymbol{\beta}_{(j)} = (\beta_{1j}, \ldots, \beta_{hj})^\top$ and
+$p_\lambda(\cdot)$ is the group LASSO, SCAD or MCP penalty. The penalty acts
+group-wise on all coefficients of predictor $j$, so variable selection
+corresponds to identifying the predictors that form a sparse basis.
+
+## Supported losses and algorithms
+
+| Machine | Response | Type | Loss $L_k(\tilde y_k, f)$ | Algorithm |
+|:--|:--|:--|:--|:--|
+| $\mathrm{P}^2\mathrm{LSM}$  | Continuous | RPM | $(1 - \tilde y_k f)^2$ | GCD |
+| $\mathrm{P}^2\mathrm{WLSM}$ | Binary     | LPM | $w_k(1 - y f)^2$ | GCD |
+| $\mathrm{P}^2\mathrm{LR}$   | Continuous | RPM | $\log(1 + e^{-\tilde y_k f})$ | Iterative GCD |
+| $\mathrm{P}^2\mathrm{WLR}$  | Binary     | LPM | $w_k \log(1 + e^{-y f})$ | Iterative GCD |
+| $\mathrm{P}^2\mathrm{AR}$   | Both       | LPM | $(y-f)^2(\rho_k\mathbb{I}\{y \ge f\} + (1-\rho_k)\mathbb{I}\{y<f\})$ | Iterative GCD |
+| $\mathrm{P}^2\mathrm{L2M}$  | Continuous | RPM | $[\max\{0, 1 - \tilde y_k f\}]^2$ | Iterative GCD |
+| $\mathrm{P}^2\mathrm{WL2M}$ | Binary     | LPM | $w_k[\max\{0, 1 - y f\}]^2$ | Iterative GCD |
+| $\mathrm{P}^2\mathrm{SVM}$  | Continuous | RPM | $\max\{0, 1 - \tilde y_k f\}$ | MM-GCD |
+| $\mathrm{P}^2\mathrm{WSVM}$ | Binary     | LPM | $w_k \max\{0, 1 - y f\}$ | MM-GCD |
+| $\mathrm{P}^2\mathrm{QR}$   | Both       | LPM | $(y-f)(\rho_k - \mathbb{I}\{y<f\})$ | MM-GCD |
+
+The squared loss yields an exact group-penalized least-squares problem solved
+directly by GCD. Smooth losses (logistic, asymmetric least squares, L2-hinge)
+are reduced to a sequence of penalized least-squares problems via quadratic
+approximation (iterative GCD). Non-differentiable losses (hinge, check) are
+handled by quadratic majorization within a majorization-minimization scheme
+(MM-GCD).
+
+# Usage
+
+The argument `loss` selects the estimator; `penalty` is one of `"grSCAD"`,
+`"grLasso"` or `"grMCP"`; `lambda` controls sparsity and is best chosen by
+cross-validation (see below).
+
+## Regression
+
+```{r regression}
+set.seed(1)
+n <- 1000; p <- 10
+B <- matrix(0, p, 2); B[1, 1] <- B[2, 2] <- 1
+x <- matrix(rnorm(n * p), n, p)
+y <- (x %*% B[, 1]) / (0.5 + (x %*% B[, 2] + 1)^2) + 0.2 * rnorm(n)
+
+## penalized principal least-squares SVM (P^2LSM)
+fit <- ppm(x, y, H = 10, C = 1, loss = "lssvm", penalty = "grSCAD", lambda = 0.01)
+round(fit$evectors[, 1:2], 3)
+summary(fit, d = 2)
+```
+
+## Binary classification
+
+For a binary response the weighted losses code the classes internally as
+$\{-1, +1\}$.
+
+```{r classification}
+y.binary <- sign(y)
+## penalized principal weighted least-squares SVM (P^2WLSM)
+fit2 <- ppm(x, y.binary, H = 10, C = 1, loss = "asls",
+            penalty = "grSCAD", lambda = 0.03)
+round(fit2$evectors[, 1:2], 3)
+```
+
+## Choosing `lambda` by cross-validation
+
+`ppm_tune()` performs $K$-fold cross-validation, selecting the `lambda` that
+maximizes the held-out distance correlation between the response and the
+estimated sufficient predictors. Call `set.seed()` beforehand for reproducible
+folds.
+
+```{r tune}
+set.seed(1)
+cv <- ppm_tune(x, y, loss = "lssvm", d = 2, n.fold = 5,
+               nlambda = 10, lambda.max = 0.02)
+cv$opt.lambda
+summary(cv$fit, d = 2)
+```
+
+# Real-data example: Wisconsin Diagnostic Breast Cancer
+
+We illustrate a weighted estimator on the Wisconsin Diagnostic Breast Cancer
+(WDBC) data, coding the diagnosis as malignant `= +1` and benign `= -1`. After
+fitting the penalized principal weighted L2-SVM (P2WL2M), the predictors are
+projected onto the estimated two-dimensional central subspace and plotted by
+class.
+
+```{r wdbc, fig.width = 5.5, fig.height = 5}
+data(wdbc)
+x <- scale(as.matrix(wdbc[, -1]))
+y <- ifelse(wdbc$diagnosis == "M", 1, -1)
+
+fit <- ppm(x, y, loss = "wl2svm", penalty = "grSCAD", lambda = 0.3)
+summary(fit, d = 2)
+
+B      <- fit$evectors[, 1:2]
+scores <- x %*% B
+plot(scores[, 1], scores[, 2],
+     col  = ifelse(y == 1, "red", "blue"),
+     pch  = ifelse(y == 1, 17, 1),
+     xlab = "1st SDR direction", ylab = "2nd SDR direction")
+legend("topright", legend = c("malignant (+1)", "benign (-1)"),
+       col = c("red", "blue"), pch = c(17, 1))
+```
+
+The Boston housing data (`data(boston)`) provide a continuous-response
+counterpart for the response-based estimators such as `"lssvm"`.
+
+# References
+
+- Li, B., Artemiou, A. and Li, L. (2011). Principal support vector machines for
+  linear and nonlinear sufficient dimension reduction. *Annals of Statistics*,
+  39(6), 3182--3210.
+- Shin, S. J. and Artemiou, A. (2017). Penalized principal logistic regression
+  for sparse sufficient dimension reduction. *Computational Statistics & Data
+  Analysis*, 111, 48--58.
+- Breheny, P. and Huang, J. (2015). Group descent algorithms for nonconvex
+  penalized linear and logistic regression models with grouped predictors.
+  *Statistics and Computing*, 25, 173--187.
+- Shin, J., Shin, S. J. and Artemiou, A. (2024). The R package psvmSDR: a
+  unified algorithm for sufficient dimension reduction via principal machines.
+  *arXiv:2409.01547*.
