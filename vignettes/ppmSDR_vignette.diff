@@ -1,0 +1,166 @@
+--- /root/.claude/uploads/43e95e9d-3535-527f-ae55-69102fab70e7/0465954b-ppmSDR.Rmd	2026-09-23 12:09:45.779325495 -0400
++++ /home/claude/vignette/ppmSDR.Rmd	2026-09-23 12:18:17.556555009 -0400
+@@ -68,6 +68,7 @@
+ Under the sparsity assumption the slopes $\boldsymbol{\beta}_k$ share a common
+ support across $k$, leading to the row-group penalized objective
+ $$
++Q(\boldsymbol{\theta}) =
+ \sum_{k=1}^{h}
+ \left[
+ \boldsymbol{\beta}_k^\top \hat{\Sigma} \boldsymbol{\beta}_k
+@@ -76,25 +77,26 @@
+ \right]
+ + \sum_{j=1}^{p} p_{\lambda}\!\left(\|\boldsymbol{\beta}_{(j)}\|_2\right),
+ $$
+-where $\boldsymbol{\beta}_{(j)} = (\beta_{1j}, \ldots, \beta_{hj})^\top$ and
++where $\boldsymbol{\theta}$ stacks the intercepts and slopes of the $h$
++machines, $\boldsymbol{\beta}_{(j)} = (\beta_{1j}, \ldots, \beta_{hj})^\top$ and
+ $p_\lambda(\cdot)$ is the group LASSO, SCAD or MCP penalty. The penalty acts
+ group-wise on all coefficients of predictor $j$, so variable selection
+ corresponds to identifying the predictors that form a sparse basis.
+ 
+ ## Supported losses and algorithms
+ 
+-| Machine | Response | Type | Loss $L_k(\tilde y_k, f)$ | Algorithm |
+-|:--|:--|:--|:--|:--|
+-| $\mathrm{P}^2\mathrm{LSM}$  | Continuous | RPM | $(1 - \tilde y_k f)^2$ | GCD |
+-| $\mathrm{P}^2\mathrm{WLSM}$ | Binary     | LPM | $w_k(1 - y f)^2$ | GCD |
+-| $\mathrm{P}^2\mathrm{LR}$   | Continuous | RPM | $\log(1 + e^{-\tilde y_k f})$ | Iterative GCD |
+-| $\mathrm{P}^2\mathrm{WLR}$  | Binary     | LPM | $w_k \log(1 + e^{-y f})$ | Iterative GCD |
+-| $\mathrm{P}^2\mathrm{AR}$   | Both       | LPM | $(y-f)^2(\rho_k\mathbb{I}\{y \ge f\} + (1-\rho_k)\mathbb{I}\{y<f\})$ | Iterative GCD |
+-| $\mathrm{P}^2\mathrm{L2M}$  | Continuous | RPM | $[\max\{0, 1 - \tilde y_k f\}]^2$ | Iterative GCD |
+-| $\mathrm{P}^2\mathrm{WL2M}$ | Binary     | LPM | $w_k[\max\{0, 1 - y f\}]^2$ | Iterative GCD |
+-| $\mathrm{P}^2\mathrm{SVM}$  | Continuous | RPM | $\max\{0, 1 - \tilde y_k f\}$ | MM-GCD |
+-| $\mathrm{P}^2\mathrm{WSVM}$ | Binary     | LPM | $w_k \max\{0, 1 - y f\}$ | MM-GCD |
+-| $\mathrm{P}^2\mathrm{QR}$   | Both       | LPM | $(y-f)(\rho_k - \mathbb{I}\{y<f\})$ | MM-GCD |
++| Machine | Response | Type | Loss $L_k(\tilde y_k, f)$ | Algorithm | `line.search` default |
++|:-----|:------|:---|:---------------|:-------|:-------|
++| $\mathrm{P}^2\mathrm{LSM}$  | Continuous | RPM | $(1 - \tilde y_k f)^2$ | GCD | not applicable |
++| $\mathrm{P}^2\mathrm{WLSM}$ | Binary     | LPM | $w_k(1 - y f)^2$ | GCD | not applicable |
++| $\mathrm{P}^2\mathrm{LR}$   | Continuous | RPM | $\log(1 + e^{-\tilde y_k f})$ | Iterative GCD | `TRUE` |
++| $\mathrm{P}^2\mathrm{WLR}$  | Binary     | LPM | $w_k \log(1 + e^{-y f})$ | Iterative GCD | `TRUE` |
++| $\mathrm{P}^2\mathrm{AR}$   | Both       | LPM | $(y-f)^2(\tau_k\mathbb{I}\{y \ge f\} + (1-\tau_k)\mathbb{I}\{y<f\})$ | Iterative GCD | `FALSE` |
++| $\mathrm{P}^2\mathrm{L2M}$  | Continuous | RPM | $[\max\{0, 1 - \tilde y_k f\}]^2$ | Iterative GCD | `TRUE` |
++| $\mathrm{P}^2\mathrm{WL2M}$ | Binary     | LPM | $w_k[\max\{0, 1 - y f\}]^2$ | Iterative GCD | `TRUE` |
++| $\mathrm{P}^2\mathrm{SVM}$  | Continuous | RPM | $\max\{0, 1 - \tilde y_k f\}$ | MM-GCD | `FALSE` |
++| $\mathrm{P}^2\mathrm{WSVM}$ | Binary     | LPM | $w_k \max\{0, 1 - y f\}$ | MM-GCD | `FALSE` |
++| $\mathrm{P}^2\mathrm{QR}$   | Both       | LPM | $(y-f)(\tau_k - \mathbb{I}\{y<f\})$ | MM-GCD | `FALSE` |
+ 
+ The squared loss yields an exact group-penalized least-squares problem solved
+ directly by GCD. Smooth losses (logistic, asymmetric least squares, L2-hinge)
+@@ -103,11 +105,34 @@
+ handled by quadratic majorization within a majorization-minimization scheme
+ (MM-GCD).
+ 
++## Step-halving line search
++
++The quadratic approximations used by the iterative GCD algorithm are local
++approximations rather than majorizers of the loss, so a plain GCD update does
++not by itself guarantee that $Q(\boldsymbol{\theta})$ decreases. With
++`line.search = TRUE`, the candidate $\hat{\boldsymbol{\theta}}^{(t)}$ returned
++by the GCD step at iteration $t$ is accepted in the damped form
++$$
++\boldsymbol{\theta}^{(t+1)} = \boldsymbol{\theta}^{(t)}
+++ 2^{-m_t}\left(\hat{\boldsymbol{\theta}}^{(t)} - \boldsymbol{\theta}^{(t)}\right),
++$$
++where $m_t \ge 0$ is the smallest integer for which
++$Q(\boldsymbol{\theta}^{(t+1)}) \le Q(\boldsymbol{\theta}^{(t)})$, evaluated on
++the penalized objective itself rather than on the quadratic surrogate. If no
++such $m_t \le$ `max.halving` (default 10) exists, the current iterate is
++retained and the algorithm stops. The safeguard therefore guarantees monotone
++non-increase of $Q(\boldsymbol{\theta})$, and it coincides with the plain
++update ($m_t = 0$) whenever the plain update does not increase the objective.
++The default `line.search = NULL` selects the loss-specific default in the
++table above, and `line.search = FALSE` always gives the plain updates.
++
+ # Usage
+ 
+ The argument `loss` selects the estimator; `penalty` is one of `"grSCAD"`,
+ `"grLasso"` or `"grMCP"`; `lambda` controls sparsity and is best chosen by
+-cross-validation (see below).
++cross-validation (see below). For a binary response, the weighted losses
++(`"wlssvm"`, `"wlogit"`, `"wl2svm"`, `"wsvm"`) code the classes internally as
++$\{-1, +1\}$; see the real-data example in Section 4.
+ 
+ ## Regression
+ 
+@@ -124,17 +149,49 @@
+ summary(fit, d = 2)
+ ```
+ 
+-## Binary classification
++The same interface fits any other estimator. For example, the penalized
++principal asymmetric least squares regression ($\mathrm{P}^2\mathrm{AR}$)
++examines the response at several asymmetry levels $\tau_k$:
++
++```{r asls}
++## penalized principal asymmetric least squares regression (P^2AR)
++fit_ar <- ppm(x, y, H = 10, C = 1, loss = "asls", penalty = "grSCAD", lambda = 0.05)
++round(fit_ar$evectors[, 1:2], 3)
++```
++
++## Monitoring convergence with the line search
+ 
+-For a binary response the weighted losses code the classes internally as
+-$\{-1, +1\}$.
++For the iterative GCD losses the fitted object records the number of outer
++iterations (`iter`), the termination status (`status`), and, when the line
++search is on, the objective path (`objective`) and the number of halvings
++$m_t$ at each iteration (`n.halving`). For $\mathrm{P}^2\mathrm{LR}$ the
++safeguard is on by default:
++
++```{r linesearch}
++## penalized principal logistic regression (P^2LR)
++fit_lr <- ppm(x, y, loss = "logit", penalty = "grSCAD", lambda = 0.01)
++print(fit_lr)
++fit_lr$n.halving                  # m_t at each iteration (0 = plain update)
++all(diff(fit_lr$objective) <= 0)  # Q never increases
++
++## the plain updates give the same fit whenever no step is damped
++fit_lr0 <- ppm(x, y, loss = "logit", penalty = "grSCAD", lambda = 0.01,
++               line.search = FALSE)
++all.equal(fit_lr$M, fit_lr0$M)
++```
+ 
+-```{r classification}
+-y.binary <- sign(y)
+-## penalized principal weighted least-squares SVM (P^2WLSM)
+-fit2 <- ppm(x, y.binary, H = 10, C = 1, loss = "asls",
+-            penalty = "grSCAD", lambda = 0.03)
+-round(fit2$evectors[, 1:2], 3)
++For $\mathrm{P}^2\mathrm{AR}$ the plain updates are the default, and the
++safeguard can be requested explicitly. Here it damps an update, terminates
++earlier, and returns the same basis as the plain updates.
++
++```{r linesearch-asls, fig.width = 5.5, fig.height = 4}
++fit_ar_ls <- ppm(x, y, loss = "asls", penalty = "grSCAD", lambda = 0.05,
++                 line.search = TRUE)
++c(plain = fit_ar$iter, safeguarded = fit_ar_ls$iter)
++table(fit_ar_ls$n.halving)        # how often each m_t was used
++round(fit_ar_ls$evectors[, 1:2], 3)
++plot(fit_ar_ls$objective, type = "l",
++     xlab = "iteration t", ylab = expression(Q(theta^(t))))
+ ```
+ 
+ ## Choosing `lambda` by cross-validation
+@@ -142,7 +199,7 @@
+ `ppm_tune()` performs $K$-fold cross-validation, selecting the `lambda` that
+ maximizes the held-out distance correlation between the response and the
+ estimated sufficient predictors. Call `set.seed()` beforehand for reproducible
+-folds.
++folds. The line-search settings are passed to every cross-validation fit.
+ 
+ ```{r tune}
+ set.seed(1)
+@@ -178,6 +235,11 @@
+        col = c("red", "blue"), pch = c(17, 1))
+ ```
+ 
++If the summary reports `line.search.halted`, the safeguard stopped at the last
++iterate that decreased the penalized objective, because a further GCD update
++would have increased it; `fit$iter` and `fit$n.halving` show where this
++happened. Refitting with `line.search = FALSE` gives the plain updates.
++
+ The Boston housing data (`data(boston)`) provide a continuous-response
+ counterpart for the response-based estimators such as `"lssvm"`.
+ 
